@@ -1,0 +1,13 @@
+variable "cluster_name" { type = string }
+variable "cluster_version" { type = string }
+variable "vpc_id" { type = string }
+variable "subnets" { type = list(string) }
+variable "node_group_name" { type = string }
+variable "node_instance_type" { type = string }
+variable "desired_capacity" { type = number }
+variable "min_size" { type = number }
+variable "max_size" { type = number }
+variable "tags" { type = map(string) }
+variable "cluster_role_arn" { type = string }
+variable "node_role_arn" { type = string }
+variable "node_sg_id" { type = string }

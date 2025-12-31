@@ -1,0 +1,12 @@
+replicaCount: 2
+name: algorithm-a
+image:
+  repository: myrepo/algorithm-a
+  tag: latest
+rabbitmq:
+  host: rabbitmq
+  queue: audio
+secrets:
+  name_prefix: audio-system
+  rabbit_user_secret: audio-system-rabbit-user
+  rabbit_pass_secret: audio-system-rabbit-pass

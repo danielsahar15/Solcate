@@ -1,0 +1,29 @@
+replicaCount: 2
+name: rest-api
+image:
+  repository: rest-api
+  tag: latest
+
+service:
+  type: ClusterIP
+  port: 443          # Exposed to ALB via HTTPS
+  targetPort: 8080   # Container listens on 8080 internally
+
+ingress:
+  enabled: true
+  host: api.elbit.com
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:123456789012:certificate/abcd-1234
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+  tls:
+    - hosts:
+        - api.elbit.com
+      secretName: tls-secret
+
+secrets:
+  name_prefix: audio-system
+  db_username_secret: audio-system-db-username
+  db_password_secret: audio-system-db-password

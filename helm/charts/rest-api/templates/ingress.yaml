@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rest-api
+  namespace: {{ .Release.Namespace }}
+  annotations:
+{{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rest-api
+                port:
+                  number: {{ .Values.service.port }}
+  tls:
+{{- range .Values.ingress.tls }}
+    - hosts:
+{{- range .hosts }}
+        - {{ . }}
+{{- end }}
+      secretName: {{ .secretName }}
+{{- end }}

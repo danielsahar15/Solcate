@@ -1,0 +1,14 @@
+replicaCount: 1
+name: datawriter
+image:
+  repository: myrepo/datawriter
+  tag: latest
+rabbitmq:
+  host: rabbitmq
+  queue: features
+secrets:
+  name_prefix: "audio-system"
+  db_username_secret: "audio-system-db-username"
+  db_password_secret: "audio-system-db-password"
+  rabbit_user_secret: "audio-system-rabbit-user"
+  rabbit_pass_secret: "audio-system-rabbit-pass"

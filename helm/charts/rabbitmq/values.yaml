@@ -1,0 +1,13 @@
+replicaCount: 1
+name: rabbitmq
+image:
+  repository: rabbitmq
+  tag: 3.11-management
+persistence:
+  enabled: true
+  storageClass: gp2
+  size: 10Gi
+service:
+  type: ClusterIP
+  port: 5672
+  managementPort: 15672
