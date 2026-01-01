@@ -1,0 +1,46 @@
+name: CI
+on:
+  pull_request:
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPO_ALGO: algorithm-a
+  ECR_REPO_REST: rest-api
+  ECR_REPO_WRITER: datawriter
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push algorithm-a
+        run: |
+          IMAGE_URI="${{ steps.ecr-login.outputs.registry }}/${ECR_REPO_ALGO}:latest"
+          docker build -t $IMAGE_URI ./app/algorithm-a
+          docker push $IMAGE_URI
+
+      - name: Build and push rest-api
+        run: |
+          IMAGE_URI="${{ steps.ecr-login.outputs.registry }}/${ECR_REPO_REST}:latest"
+          docker build -t $IMAGE_URI ./app/rest-api
+          docker push $IMAGE_URI
+
+      - name: Build and push datawriter
+        run: |
+          IMAGE_URI="${{ steps.ecr-login.outputs.registry }}/${ECR_REPO_WRITER}:latest"
+          docker build -t $IMAGE_URI ./app/datawriter
+          docker push $IMAGE_URI
